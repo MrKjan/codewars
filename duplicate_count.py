@@ -7,10 +7,3 @@ def duplicate_count(text):
     return ret
 
 print(duplicate_count("AaaabbBbccCd")) # 0
-
-# print(duplicate_count("")) # 0
-# print(duplicate_count("abcde")) # 0
-# print(duplicate_count("abcdeaa")) # 1
-# print(duplicate_count("abcdeaB")) # 2
-# print(duplicate_count("Indivisibilities")) # 2
-
