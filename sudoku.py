@@ -17,12 +17,12 @@ class recursion(object):
         return lambda: self.func(*args, **kwargs)
 
 
-# @recursion
-# def sum_natural(x, result=0):
-#     if x == 0:
-#         return result
-#     else:
-#         return sum_natural.call(x - 1, result + x)
+@recursion
+def sum_natural(x, result=0):
+    if x == 0:
+        return result
+    else:
+        return sum_natural.call(x - 1, result + x)
 
 # Даже такой вызов не заканчивается исключением
 # RuntimeError: maximum recursion depth exceeded
@@ -30,22 +30,18 @@ class recursion(object):
 
 # _____________________________
 
+puzzle_example = [[5,3,0,0,7,0,0,0,0],
+                  [6,0,0,1,9,5,0,0,0],
+                  [0,9,8,0,0,0,0,6,0],
+                  [8,0,0,0,6,0,0,0,3],
+                  [4,0,0,8,0,3,0,0,1],
+                  [7,0,0,0,2,0,0,0,6],
+                  [0,6,0,0,0,0,2,8,0],
+                  [0,0,0,4,1,9,0,0,5],
+                  [0,0,0,0,8,0,0,7,9]]
+
+# Copy from here
 from queue import Queue
-
-#***************************************************
-#******************* Cell **************************
-#***************************************************
-# class Cell():
-#     def __init__(self, coord, value) -> None:
-#         self.coord = coord # (x, y)
-#         self.value = value if 0 != value else [[1,2,3,4,5,6,7,8,9]] # [] of possible values or an int value
-
-#     def is_solved(self):
-#         True if type(self.value) is int else False
-
-#***************************************************
-#******************* Sudoku ************************
-#***************************************************
 class Sudoku():
     def __init__(self, puzzle) -> None:
         self.todo = Queue()
@@ -61,10 +57,6 @@ class Sudoku():
     def solve(self):
         cnt = 0
         while(True):
-            if cnt >= self.todo.qsize():
-                print('Cant solve')
-                return puzzle_example
-
             if 0 == self.todo.qsize():
                 return self.puzzle
             else:
@@ -83,19 +75,15 @@ class Sudoku():
     def show(self):
         for ii in range(9):
             for jj in range(9):
-                print(self.puzzle[ii][jj])
+                print(self.puzzle[ii][jj], end=' ')
+            print()
 
-    # Update self.value in cell
     def compute_possible_values(self, item):
         old_values = self.puzzle[item[0]][item[1]]
-        assert(type(old_values) is tuple), f'old_values: {old_values}'
         dependent_values = self.get_dependent_cell_values(item)
         diff = list(filter(lambda value: value not in dependent_values, old_values))
-        assert(len(diff) != 0), f'diff: {diff}'
         return diff if len(diff) > 1 else diff[0]
 
-
-    # list of not solved cell coords in a row, column, or 3x3 cell
     def get_dependent_cells(self, item):
         x = item[0]
         y = item[1]
@@ -109,7 +97,6 @@ class Sudoku():
             (X+0, Y+2), (X+1, Y+2), (X+2, Y+2)
         }
 
-    # list of not solved cell values in a row, column, or 3x3 cell
     def get_dependent_cell_values(self, item):
         dependent_cells = self.get_dependent_cells(item)
         dependent_cells.remove(item)
@@ -119,24 +106,11 @@ class Sudoku():
                 ret.add(self.puzzle[dep_cell[0]][dep_cell[1]])
         return ret
 
-#***************************************************
-#********************* Main ************************
-#***************************************************
-puzzle_example = [[5,3,0,0,7,0,0,0,0],
-                  [6,0,0,1,9,5,0,0,0],
-                  [0,9,8,0,0,0,0,6,0],
-                  [8,0,0,0,6,0,0,0,3],
-                  [4,0,0,8,0,3,0,0,1],
-                  [7,0,0,0,2,0,0,0,6],
-                  [0,6,0,0,0,0,2,8,0],
-                  [0,0,0,4,1,9,0,0,5],
-                  [0,0,0,0,8,0,0,7,9]]
-
 def sudoku(puzzle):
     sdk = Sudoku(puzzle)
     sdk.solve()
-    sdk.show()
+    # sdk.show()
+    return(sdk.puzzle)
 
-sudoku(puzzle_example)
-
-# print(sudoku(puzzle_example))
+# End of copy zone
+print(sudoku(puzzle_example))
