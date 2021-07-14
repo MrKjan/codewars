@@ -87,14 +87,14 @@ class Sudoku():
     def get_dependent_cells(self, item):
         x = item[0]
         y = item[1]
-        X = (x//3)*3
-        Y = (y//3)*3
+        xx = (x//3)*3
+        yy = (y//3)*3
         return {
             (x, 0), (x, 1), (x, 2), (x, 3), (x, 4), (x, 5), (x, 6), (x, 7), (x, 8),
             (0, y), (1, y), (2, y), (3, y), (4, y), (5, y), (6, y), (7, y), (8, y), 
-            (X+0, Y+0), (X+1, Y+0), (X+2, Y+0),
-            (X+0, Y+1), (X+1, Y+1), (X+2, Y+1),
-            (X+0, Y+2), (X+1, Y+2), (X+2, Y+2)
+            (xx+0, yy+0), (xx+1, yy+0), (xx+2, yy+0),
+            (xx+0, yy+1), (xx+1, yy+1), (xx+2, yy+1),
+            (xx+0, yy+2), (xx+1, yy+2), (xx+2, yy+2)
         }
 
     def get_dependent_cell_values(self, item):
