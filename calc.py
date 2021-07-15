@@ -9,17 +9,45 @@ class Calculator(object):
                         data.insert(idx, '+')
                 return data
 
+            def is_digit(string):
+                for item in string:
+                    if not item.isdigit() and item != '-':
+                        return False
+                return True
+
             def join_values(data):
-                def is_digit(string):
-                    for item in string:
-                        if not item.isdigit() and item != '-':
-                            return False
-                    return True
+                idx = 0
+                while idx < len(data):
+                    if idx + 1 < len(data) and is_digit(data[idx]) and is_digit(data[idx+1]):
+                        data[idx] = data[idx] + data[idx + 1]
+                        data.pop(idx+1)
+                    else:
+                        idx += 1
                 
-                pass # TODO
+                return data
 
             data = list(data)
-            return str(eval(data))
+            join_values(minuses_binary_to_unary(data))
+            data = [i[i.count('-')//2*2:] if is_digit(i) else i for i in data]
+            
+            idx = 0
+            while idx < len(data):
+                if idx+1 >= len(data):
+                    break
+                if data[idx+1] == '*':
+                    data[idx] = str(int(data[idx]) * int(data[idx+2]))
+                    data.pop(idx+1)
+                    data.pop(idx+1)
+                elif data[idx+1] == '/':
+                    data[idx] = str(int(int(data[idx]) / int(data[idx+2])))
+                    data.pop(idx+1)
+                    data.pop(idx+1)
+                else:
+                    idx += 1
+            
+            ret = str(sum([int(item) for item in data if item != '+'], 0))
+
+            return ret
 
         def _evaluate(data):
             if type(data) is str:
@@ -30,9 +58,19 @@ class Calculator(object):
                 else:
                     return _evaluate(''.join([_evaluate(item) if type(item) is list else item for item in data]))
         
+        def parse_nested_expr(self, string):
+            def get_bracket_pair_pos(string):
+                if open := string.find('(') < 0:
+                    return -1, -1
+                for i in string:
+                    pass #todo
+
+            pass
+        
         return _evaluate( nestedExpr().parseString(f'({data})').asList() )
 
-# print(Calculator().evaluate("2 / (2) + 3*(4-1) - 6*(-4)"))
-# print(Calculator().evaluate("(((-(0))+1))"))
-# print(Calculator().evaluate("-1*1+-1*-1*1-1*1"))
-# print(Calculator().evaluate("-1*-----1*--1"))
+print(Calculator().evaluate("(4-1)"))
+print(Calculator().evaluate("2 / (2) + 3*(4-1) - 6*(-4)"))
+print(Calculator().evaluate("(((-(0))+1))"))
+print(Calculator().evaluate("-1*1+-1*-1*1-1*1"))
+print(Calculator().evaluate("-1*-----1*--1"))
