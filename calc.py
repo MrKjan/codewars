@@ -62,8 +62,17 @@ class Calculator(object):
             def get_bracket_pair_pos(string):
                 if open := string.find('(') < 0:
                     return -1, -1
-                for i in string:
-                    pass #todo
+                count = 1
+                for idx, item in enumerate(string[open+1:]):
+                    if '(' == item:
+                        count += 1
+                    if ')' == item:
+                        count -= 1
+                    if 0 == count:
+                        break
+                else:
+                    return open, -1
+                return open, open + idx
 
             pass
         
